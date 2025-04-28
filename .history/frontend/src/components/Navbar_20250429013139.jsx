@@ -2,19 +2,16 @@ import React, { useState } from 'react';
 import { FaHeart, FaSearch, FaShoppingCart, FaSignInAlt, FaUser, FaUserPlus } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { selectCurrentRole, selectCurrentUser, selectIsAuthenticated } from '../redux/authSelectors';
+import { selectAuthData } from '../redux/authSelectors'; // Import selector
 import { logout } from '../redux/authSlice';
 
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const user = useSelector(selectCurrentUser);
-  const role = useSelector(selectCurrentRole);
   
   // Sử dụng selector đã memoize
-
+  const { user, role } = useSelector(selectAuthData);
 
   const handleLogout = () => {
     dispatch(logout());

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaHeart, FaSearch, FaShoppingCart, FaSignInAlt, FaUser, FaUserPlus } from 'react-icons/fa';
+import { FaHeart, FaSearch, FaShieldAlt, FaShoppingCart, FaSignInAlt, FaUser, FaUserPlus } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { selectCurrentRole, selectCurrentUser, selectIsAuthenticated } from '../redux/authSelectors';
@@ -12,9 +12,6 @@ function Navbar() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectCurrentUser);
   const role = useSelector(selectCurrentRole);
-  
-  // Sử dụng selector đã memoize
-
 
   const handleLogout = () => {
     dispatch(logout());
@@ -35,14 +32,17 @@ function Navbar() {
           0
         </span>
       </Link>
-      
-      {/* Admin Dashboard Link - Only visible for admins */}
+
+      {/* Admin Icon and Dashboard Link - Only visible for admins */}
       {role === 'admin' && (
-        <Link to="/admin/dashboard" className="hover:text-gray-600 transition">
-          <span className="hidden md:inline">Admin</span>
-        </Link>
+        <div className="flex items-center space-x-2">
+          <FaShieldAlt className="h-5 w-5 text-yellow-500" />
+          <Link to="/admin/dashboard" className="hover:text-gray-600 transition">
+            <span className="hidden md:inline">Admin</span>
+          </Link>
+        </div>
       )}
-      
+
       <div className="relative group">
         <button className="hover:text-black transition-transform hover:scale-105">
           <FaUser className="h-5 w-5" />
@@ -132,7 +132,7 @@ function Navbar() {
               <Link to="/sale" className="text-red-600 hover:text-red-700 transition px-4">Sale</Link>
               {role === 'admin' && (
                 <Link to="/admin/dashboard" className="hover:text-gray-600 transition px-4">
-                  Admin Dashboard
+                  <FaShieldAlt className="h-5 w-5 text-yellow-500" /> Admin Dashboard
                 </Link>
               )}
               <div className="relative px-4">

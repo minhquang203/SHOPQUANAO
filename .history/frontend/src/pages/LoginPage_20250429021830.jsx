@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { FaEnvelope, FaLock } from "react-icons/fa";
-
+import { FaEnvelope } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { setCredentials } from '../redux/authSlice'; // file authSlice bạn đã có
@@ -47,8 +46,6 @@ function Login() {
           },
           token: data.data.token,
         }));
-        console.log(data.data.user);
-
 
         // Nếu là admin thì navigate tới admin
         navigate(data.data.user.role === 'admin' ? '/admin' : '/');

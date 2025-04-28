@@ -47,8 +47,6 @@ function Login() {
           },
           token: data.data.token,
         }));
-        console.log(data.data.user);
-
 
         // Nếu là admin thì navigate tới admin
         navigate(data.data.user.role === 'admin' ? '/admin' : '/');

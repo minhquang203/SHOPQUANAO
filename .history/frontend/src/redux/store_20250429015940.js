@@ -1,14 +1,13 @@
-// redux/store.js
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // lưu trên localStorage
+import storage from 'redux-persist/lib/storage';
+import thunk from 'redux-thunk';
 import authReducer from './authSlice';
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'], // chỉ persist auth
 };
 
 const rootReducer = combineReducers({
@@ -19,10 +18,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+  middleware: [thunk],
 });
 
 export const persistor = persistStore(store);

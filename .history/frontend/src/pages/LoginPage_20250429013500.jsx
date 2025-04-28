@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
-import { FaEnvelope, FaLock } from "react-icons/fa";
-
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { setCredentials } from '../redux/authSlice'; // file authSlice bạn đã có
-
+import { setCredentials } from '../redux/authSlice';
+import { useSelector } from 'react-redux';
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    const role = useSelector(selectCurrentRole);
     email: '',
     password: '',
   });
-
-  const handleChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
+  
     try {
       const response = await fetch('http://localhost:8000/auth/login', {
         method: 'POST',
@@ -34,35 +27,31 @@ function Login() {
       });
 
       const data = await response.json();
-      console.log('Login API Response:', data);
+      console.log('API Response:', data); // Trước khi dispatch
 
-      if (response.ok && data.data.token && data.data.user) {
-        // Dispatch dữ liệu vào Redux store
+
+      if (response.ok) {
         dispatch(setCredentials({
           user: {
-            id: data.data.user._id,
-            username: data.data.user.username,
-            email: data.data.user.email,
-            role: data.data.user.role, // ✨ Phải có role
+            id: data._id,
+            username: data.username,
+            email: data.email,
           },
-          token: data.data.token,
+          token: data.token,
+          role: data.role || 'user', // Mặc định là 'user' nếu backend không trả về
         }));
-        console.log(data.data.user);
-
-
-        // Nếu là admin thì navigate tới admin
-        navigate(data.data.user.role === 'admin' ? '/admin' : '/');
+        dispatch(setCredentials({ user, token, role }));
+        navigate(data.role === 'admin' ? '/admin/dashboard' : '/');
       } else {
-        alert(data.message || 'Đăng nhập thất bại');
+        alert(data.message || 'Login failed');
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại sau.');
+      alert('An error occurred');
     } finally {
       setIsLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center">

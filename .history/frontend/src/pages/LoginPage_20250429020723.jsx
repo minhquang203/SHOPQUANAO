@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { FaEnvelope, FaLock } from "react-icons/fa";
-
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { setCredentials } from '../redux/authSlice'; // file authSlice bạn đã có
-
+import { setCredentials } from '../redux/authSlice';
 
 function Login() {
   const dispatch = useDispatch();
@@ -36,24 +34,20 @@ function Login() {
       const data = await response.json();
       console.log('Login API Response:', data);
 
-      if (response.ok && data.data.token && data.data.user) {
-        // Dispatch dữ liệu vào Redux store
+      if (response.ok && data.token && data._id) {
         dispatch(setCredentials({
-          user: {
-            id: data.data.user._id,
-            username: data.data.user.username,
-            email: data.data.user.email,
-            role: data.data.user.role, // ✨ Phải có role
+          auth: {
+            id: data._id,
+            username: data.username,
+            email: data.email,
           },
-          token: data.data.token,
+          token: data.token,
+          role: data.role || 'user',
         }));
-        console.log(data.data.user);
 
-
-        // Nếu là admin thì navigate tới admin
-        navigate(data.data.user.role === 'admin' ? '/admin' : '/');
+        navigate(data.role === 'admin' ? '/admin/dashboard' : '/');
       } else {
-        alert(data.message || 'Đăng nhập thất bại');
+        alert(data.message || 'Login thất bại. Kiểm tra lại thông tin.');
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -62,7 +56,6 @@ function Login() {
       setIsLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center">
