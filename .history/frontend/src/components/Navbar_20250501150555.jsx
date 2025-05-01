@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState } from "react";
 import {
   FaHeart,
@@ -25,10 +24,11 @@ function Navbar() {
   const user = useSelector(selectCurrentUser);
   const role = useSelector(selectCurrentRole);
 
-  // Handle logout and redirect to homepage
+  // Sử dụng selector đã memoize
+
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/"); // Changed from "/login" to "/" for redirecting to homepage
+    navigate("/");
   };
 
   const AuthenticatedIcons = () => (

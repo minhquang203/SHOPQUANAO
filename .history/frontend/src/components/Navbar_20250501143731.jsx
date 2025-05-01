@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState } from "react";
 import {
   FaHeart,
@@ -25,10 +24,11 @@ function Navbar() {
   const user = useSelector(selectCurrentUser);
   const role = useSelector(selectCurrentRole);
 
-  // Handle logout and redirect to homepage
+  // Sử dụng selector đã memoize
+
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/"); // Changed from "/login" to "/" for redirecting to homepage
+    navigate("/login");
   };
 
   const AuthenticatedIcons = () => (
@@ -139,13 +139,13 @@ function Navbar() {
             </Link>
           </div>
 
-          <div className="relative w-32 focus-within:w-64 transition-all duration-300 ease-in-out">
+          <div className="hidden md:flex items-center relative">
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-black"
+              className="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-black"
             />
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FaSearch className="absolute left-3 text-gray-400" />
           </div>
 
           {user ? <AuthenticatedIcons /> : <NonAuthenticatedIcons />}
@@ -200,14 +200,15 @@ function Navbar() {
                   Admin Dashboard
                 </Link>
               )}
-              <div className="relative px-4">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-black"
-                />
-                <FaSearch className="absolute left-7 top-3 text-gray-400" />
-              </div>
+<div className="relative w-full max-w-md">
+  <input
+    type="text"
+    placeholder="Search..."
+    className="w-full pl-4 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+  />
+  <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-500" />
+</div>
+
             </div>
           </div>
         )}
